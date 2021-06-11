@@ -252,7 +252,8 @@ Route::prefix('auth')->group(function () {
 	Route::post('/password/reset', 'App\Http\Controllers\Api\Auth\AuthController@resetPassword')->name('password.reset');
 });
 ```
-> Note: uncomment `// protected $namespace = 'App\\Http\\Controllers';` on app\Providers/RouteServiceProvider.php if u want to use `Api\Auth\AuthController@sendPasswordResetLinkEmail` instead of `App\Http\Controllers\Api\Auth\AuthController@sendPasswordResetLinkEmail` when defining routes.
+
+> Note: uncomment `// protected $namespace = 'App\\Http\\Controllers';` on `app/Providers/RouteServiceProvider.php` if u want to use `Api\Auth\AuthController@...` instead of `App\Http\Controllers\Api\Auth\AuthController@...` when defining routes.
 
 
 Thats about it ! All the endpoints and implementations for auth routes as mentioned [here](#api-endpoints) is complete and ready for test.
