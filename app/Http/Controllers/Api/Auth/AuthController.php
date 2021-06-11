@@ -13,6 +13,26 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+
+	/*
+	 * Register new user
+	*/
+	public function signup(Request $request) {
+		$validatedData = $request->validate([
+			'name' => 'required|string|max:255',
+			'email' => 'required|email|unique:users,email',
+			'password' => 'required|min:6|confirmed',
+		]);
+
+		$validatedData['password'] = Hash::make($validatedData['password']);
+
+		if(User::create($validatedData)) {
+			return response()->json(null, 201);
+		}
+
+		return response()->json(null, 404);
+	}
+
 	/*
 	 * Generate sanctum token on successful login
 	*/
