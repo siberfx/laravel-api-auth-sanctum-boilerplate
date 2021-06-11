@@ -1,5 +1,5 @@
 # laravel-api-auth-sanctum-boilerplate
-laravel boilerplate with api auth using sanctum (login, logout, reset password)
+laravel boilerplate with api auth using sanctum (signup, login, logout, reset password)
 
 ## Setup Instructions
 - clone the repo
@@ -17,6 +17,7 @@ laravel boilerplate with api auth using sanctum (login, logout, reset password)
 The auth routes are present in `routes/api.php` and prefixed with `auth` as follows:
 ```php
 Route::prefix('auth')->group(function () {
+	Route::post('signup', 'App\Http\Controllers\Api\Auth\AuthController@signup')->name('auth.signup');
 	Route::post('login', 'App\Http\Controllers\Api\Auth\AuthController@login')->name('auth.login');
 	Route::post('logout', 'App\Http\Controllers\Api\Auth\AuthController@logout')->middleware('auth:sanctum')->name('auth.logout');
 	Route::get('user', 'App\Http\Controllers\Api\Auth\AuthController@getAuthenticatedUser')->middleware('auth:sanctum')->name('auth.user');
@@ -27,6 +28,17 @@ Route::prefix('auth')->group(function () {
 ```
 Hence all the api auth routes are prefixed with `/api/auth` and the routes are:
 ### api endpoints
+
+- Signup:
+
+  `POST: /api/auth/signup`
+  ```json
+  {
+    "name": "John Doe",
+    "email": "johndoe@example.org",
+    "password": "password"
+  }
+  ```
 - Login:
 
   `POST: /api/auth/login`
@@ -116,6 +128,26 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+
+	/*
+	 * Register new user
+	*/
+	public function signup(Request $request) {
+		$validatedData = $request->validate([
+			'name' => 'required|string|max:255',
+			'email' => 'required|email|unique:users,email',
+			'password' => 'required|min:6|confirmed',
+		]);
+
+		$validatedData['password'] = Hash::make($validatedData['password']);
+
+		if(User::create($validatedData)) {
+			return response()->json(null, 201);
+		}
+
+		return response()->json(null, 404);
+	}
+
 	/*
 	 * Generate sanctum token on successful login
 	*/
@@ -211,6 +243,7 @@ class AuthController extends Controller
 ```php
 // Auth
 Route::prefix('auth')->group(function () {
+	Route::post('signup', 'App\Http\Controllers\Api\Auth\AuthController@signup')->name('auth.signup');
 	Route::post('login', 'App\Http\Controllers\Api\Auth\AuthController@login')->name('auth.login');
 	Route::post('logout', 'App\Http\Controllers\Api\Auth\AuthController@logout')->middleware('auth:sanctum')->name('auth.logout');
 	Route::get('user', 'App\Http\Controllers\Api\Auth\AuthController@getAuthenticatedUser')->middleware('auth:sanctum')->name('auth.user');
@@ -219,6 +252,8 @@ Route::prefix('auth')->group(function () {
 	Route::post('/password/reset', 'App\Http\Controllers\Api\Auth\AuthController@resetPassword')->name('password.reset');
 });
 ```
+> Note: uncomment `// protected $namespace = 'App\\Http\\Controllers';` on app\Providers/RouteServiceProvider.php if u want to use `Api\Auth\AuthController@sendPasswordResetLinkEmail` instead of `App\Http\Controllers\Api\Auth\AuthController@sendPasswordResetLinkEmail` when defining routes.
+
 
 Thats about it ! All the endpoints and implementations for auth routes as mentioned [here](#api-endpoints) is complete and ready for test.
 
