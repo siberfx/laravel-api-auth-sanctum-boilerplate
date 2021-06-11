@@ -211,12 +211,12 @@ class AuthController extends Controller
 ```php
 // Auth
 Route::prefix('auth')->group(function () {
-	Route::post('login', 'Api\Auth\AuthController@login')->name('auth.login');
-	Route::post('logout', 'Api\Auth\AuthController@logout')->middleware('auth:sanctum')->name('auth.logout');
-	Route::get('user', 'Api\Auth\AuthController@getAuthenticatedUser')->middleware('auth:sanctum')->name('auth.user');
+	Route::post('login', 'App\Http\Controllers\Api\Auth\AuthController@login')->name('auth.login');
+	Route::post('logout', 'App\Http\Controllers\Api\Auth\AuthController@logout')->middleware('auth:sanctum')->name('auth.logout');
+	Route::get('user', 'App\Http\Controllers\Api\Auth\AuthController@getAuthenticatedUser')->middleware('auth:sanctum')->name('auth.user');
 
-	Route::post('/password/email', 'Api\Auth\AuthController@sendPasswordResetLinkEmail')->middleware('throttle:5,1')->name('password.email');
-	Route::post('/password/reset', 'Api\Auth\AuthController@resetPassword')->name('password.reset');
+	Route::post('/password/email', 'App\Http\Controllers\Api\Auth\AuthController@sendPasswordResetLinkEmail')->middleware('throttle:5,1')->name('password.email');
+	Route::post('/password/reset', 'App\Http\Controllers\Api\Auth\AuthController@resetPassword')->name('password.reset');
 });
 ```
 
