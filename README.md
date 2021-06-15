@@ -1,5 +1,13 @@
 # laravel-api-auth-sanctum-boilerplate
 laravel boilerplate with api auth using sanctum (signup, login, logout, reset password)
+- [Download and setup starter code](#use-starter-project)
+- [Follow step by step guide to quickly add authentication in your existing project (recommended)](#add-sanctum-to-existing-project)
+
+
+## Use starter project
+Details of starter laravel project
+- Laravel v8.46.0
+- Sanctum v2.11
 
 ## Setup Instructions
 - clone the repo
@@ -77,9 +85,9 @@ Hence all the api auth routes are prefixed with `/api/auth` and the routes are:
     "password_confirmation": "password"
   }
   ```
-  
-### Quickly create api auth scaffold with sanctum instead ? Follow this guide:
 
+## Add sanctum to existing project
+### Quickly create api auth scaffold with sanctum instead ? Follow this guide:
 1. Create a laravel project
 	
 `composer create-project laravel/laravel my-project`
