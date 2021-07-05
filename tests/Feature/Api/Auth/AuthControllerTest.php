@@ -26,7 +26,7 @@ class AuthControllerTest extends TestCase
         // create a user
         User::factory()->create([
             'email' => 'johndoe@example.org',
-            'password' => Hash::make('abcd1234')
+            'password' => Hash::make('testpassword')
         ]);
 
     }
@@ -59,7 +59,7 @@ class AuthControllerTest extends TestCase
     {
         $response = $this->json('POST', route('auth.login'), [
             'email' =>'johndoe@example.org',
-            'password' => 'abcd1234',
+            'password' => 'testpassword',
         ]);
 
         $response->assertStatus(200)
@@ -78,7 +78,7 @@ class AuthControllerTest extends TestCase
     public function test_authenticated_user_can_get_user_details()
     {
         Sanctum::actingAs(
-            User::find(1),
+            User::first(),
         );
 
         $response = $this->json('GET', route('auth.user'));
@@ -98,7 +98,7 @@ class AuthControllerTest extends TestCase
     public function test_authenticated_user_can_logout()
     {
         Sanctum::actingAs(
-            User::find(1),
+            User::first(),
         );
 
         $response = $this->json('POST', route('auth.logout'), []);
@@ -118,7 +118,7 @@ class AuthControllerTest extends TestCase
 
     public function test_send_password_reset_link_if_email_exists()
     {
-        $user = User::find(1);
+        $user = User::first();
         $response = $this->json('POST', route('password.email'), ['email' => $user->email]);
 
         $response->assertStatus(200)
@@ -129,9 +129,9 @@ class AuthControllerTest extends TestCase
 
     public function test_reset_password_success()
     {
-        $user = User::find(1);
+        $user = User::first();
         $token = Password::broker()->createToken($user);
-        $new_password = 'abcd1234';
+        $new_password = 'testpassword';
 
         $response = $this->json('POST', route('password.reset'), [
             'token' => $token,
