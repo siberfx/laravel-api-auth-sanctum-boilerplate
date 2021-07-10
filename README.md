@@ -44,7 +44,8 @@ Hence all the api auth routes are prefixed with `/api/auth` and the routes are:
   {
     "name": "John Doe",
     "email": "johndoe@example.org",
-    "password": "password"
+    "password": "password",
+    "password_confirmation": "password"
   }
   ```
 - Login:
