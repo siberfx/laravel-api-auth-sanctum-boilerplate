@@ -264,7 +264,56 @@ Route::prefix('auth')->group(function () {
 
 > Note: uncomment `// protected $namespace = 'App\\Http\\Controllers';` on `app/Providers/RouteServiceProvider.php` if u want to use `Api\Auth\AuthController@...` instead of `App\Http\Controllers\Api\Auth\AuthController@...` when defining routes.
 
+9. Update the url in ResetPassword Email to frontend url. add `FRONTEND_URL=http://localhost:3000` in .env file. The url needs to be changed by overriding static method createUrlUsing of ResetPasswordEmail in AuthServiceProvider class. Heres how it could be done
+```php
 
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
+    protected $policies = [
+        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+    ];
+
+    /**
+     * Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerPolicies();
+
+        $frontEndUrl = env('FRONTEND_URL');
+        $this->setFrontEndUrlInResetPasswordEmail($frontEndUrl);
+    }
+
+    protected function setFrontEndUrlInResetPasswordEmail($frontEndUrl = '')
+    {
+        // update url in ResetPassword Email to frontend url
+        ResetPassword::createUrlUsing(function ($user, string $token) use ($frontEndUrl) {
+            return $frontEndUrl . '/auth/password/email/reset?token=' . $token;
+        });
+    }
+
+}
+
+```
+By using env('FRONTEND_URL'), this can be easily updated in local and production.
+> Note, env is not cached, access is slower, could add config variable.
+ 
 Thats about it ! All the endpoints and implementations for auth routes as mentioned [here](#api-endpoints) is complete and ready for test.
 
 ### Create tests for auth endpoints
