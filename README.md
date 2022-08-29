@@ -320,7 +320,7 @@ Thats about it ! All the endpoints and implementations for auth routes as mentio
 
 Create AuthController test with `php artsan make:test`
 ```bash
-php artisan make:test Api/Auth/AuthContollerTest
+php artisan make:test Api/Auth/AuthControllerTest
 ```
 
 Add Following code in `tests/Feature/Api/Auth/AuthControllerTest.php`
